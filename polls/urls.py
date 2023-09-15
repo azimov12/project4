@@ -1,12 +1,15 @@
 from django.urls import path
-from .views import all, detail, all2, detail2, ListAppView, DetailAppView, CreateAppView
+from .views import AndroidAll, IOSAll, AndroidDetail, IOSDetail, CreateAndroidView, CreateIOSView, UpdateIOS, UpdateAndroid, DeleteAndroid, DeleteIOS
 
 urlpatterns = [
-    path('detail/<int:android_id>', detail),
-    path('all/', all),
-    path('detail2/<int:ios_id>', detail2),
-    path('all2/', all2),
-    path('listApps/', ListAppView.as_view()),
-    path('detailAppView/<int:android_id>', DetailAppView.as_view()),
-    path('create/',CreateAppView.as_view()),
+    path('detail/<int:pk>', AndroidDetail.as_view()),
+    path('all/', AndroidAll),
+    path('detail2/<int:pk>', IOSDetail),
+    path('all2/', IOSAll),
+    path('create/',CreateAndroidView.as_view()),
+    path('create2/',CreateIOSView.as_view()),
+    path('update/<int:pk>', UpdateAndroid.as_view()),
+    path('update2/<int:pk>', UpdateIOS.as_view()),
+    path('delete/<int:pk>', DeleteAndroid.as_view()),
+    path('delete2/<int:pk>', DeleteIOS.as_view()),
 ]

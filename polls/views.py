@@ -1,54 +1,45 @@
-from django.shortcuts import render, get_object_or_404
 from .models import AppIOS, AppAndroid
-from django.http import JsonResponse
 from .serializers import AppIOsSerializer, AppAndroidSerializer
 from rest_framework.views import APIView
-from rest_framework.response import Response
+from rest_framework import generics
 # Create your views here.
 
-def detail(request, android_id): 
-    apps = get_object_or_404(AppAndroid, id = android_id)
-    apps_data = AppAndroidSerializer(apps)
-    
-    return JsonResponse(apps_data.data, safe=False)
+class AndroidDetail(generics.RetrieveAPIView):
+    queryset = AppAndroid.objects.all()
+    serializer_class = AppAndroidSerializer 
 
-def all(request):
-    a = AppAndroid.objects.all()
-    res = AppAndroidSerializer(a, many=True)
-    
-    return JsonResponse(res.data, safe=False)   
+class AndroidAll(generics.ListAPIView):
+    queryset = AppAndroid.objects.all()
+    serializer_class = AppAndroidSerializer 
 
+class IOSDetail(generics.RetrieveAPIView):
+    queryset = AppIOS.objects.all()
+    serializer_class = AppIOsSerializer
 
-def detail2(request, ios_id):
-    apps = get_object_or_404(AppIOS, id = ios_id)
-    apps_data = AppAndroidSerializer(apps)
-    
-    return JsonResponse(apps_data.data, safe=False)
+class IOSAll(generics.ListAPIView):
+    queryset = AppIOS.objects.all()
+    serializer_class = AppIOsSerializer 
 
-def all2(request):
-    a = AppIOS.objects.all()
-    res = AppIOsSerializer(a, many=True)
-    
-    return JsonResponse(res.data, safe=False)      
+class CreateAndroidView(generics.CreateAPIView):
+    queryset = AppAndroid.objects.all()
+    serializer_class = AppAndroidSerializer   
 
-class ListAppView(APIView):
-    def get(self, request):
-        all_data = AppAndroid.objects.all()
-        result = AppAndroidSerializer(all_data, many=True)
-        return Response(result.data)   
+class CreateIOSView(generics.CreateAPIView):
+    queryset = AppIOS.objects.all()
+    serializer_class = AppIOsSerializer 
 
-class DetailAppView(APIView):
-    def get(self, request, *args, **kwargs):
-        app = get_object_or_404(AppAndroid, id = kwargs["android_id"])
-        result = AppAndroidSerializer(app)
+class DeleteAndroid(generics.DestroyAPIView):   
+    queryset = AppAndroid.objects.all()
+    serializer_class = AppAndroidSerializer    
 
-        return Response(result.data)
+class DeleteIOS(generics.DestroyAPIView):   
+    queryset = AppIOS.objects.all()
+    serializer_class = AppIOsSerializer    
 
-class CreateAppView(APIView):
-    def post(self, request):
-        user_body = request.data
-        serializer = AppAndroidSerializer(data=user_body)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)     
-        return Response(serializer.errors)      
+class UpdateAndroid(generics.UpdateAPIView):   
+    queryset = AppAndroid.objects.all()
+    serializer_class = AppAndroidSerializer     
+
+class UpdateIOS(generics.UpdateAPIView):   
+    queryset = AppIOS.objects.all()
+    serializer_class = AppIOsSerializer
